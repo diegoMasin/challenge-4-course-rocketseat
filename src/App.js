@@ -19,6 +19,7 @@ export default function App() {
       .get("repositories")
       .then((response) => {
         setRepositories(response.data);
+        repositories;
       })
       .catch((error) => {
         console.log(error);
@@ -26,27 +27,12 @@ export default function App() {
   }, []);
 
   async function handleLikeRepository(id) {
-    const response = await api
-      .post(`repositories/${id}/like`)
-      .then((response) => {
-        // Gambiarra embaixo entre a linha 33-37
-        const newRepositoriesList = repositories.filter(
-          (item) => item.id !== id
-        );
-        const repository = response.data;
-        setRepositories([...newRepositoriesList, repository]);
-
-        // O que eu achava correta fazer, nNão funcionou com, segue abaixo:
-        // const newRepositoriesList = repositories.forEach((item) => {
-        //   if (item.id === id) item.likes++;
-        // });
-        // setRepositories(newRepositoriesList);
-        // Inspecionei com o console log, a variável "newRepositoriesList" teve o likes atualizado no index certo,
-        // mas não mudou o State. Porque o setRepositories não reconhecia a mudança do novo array?
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await api.post(`repositories/${id}/like`);
+    const newRepositoriesList = repositories.map((item) => {
+      if (item.id === id) item.likes++;
+      return item;
+    });
+    setRepositories(newRepositoriesList);
   }
 
   return (
@@ -66,19 +52,11 @@ export default function App() {
                     {tech}
                   </Text>
                 ))}
-                {/* <FlatList
-                  data={repository.techs}
-                  keyExtractor={(tech) => tech}
-                  renderItem={({ item: tech }) => (
-                    <Text style={styles.tech}>{tech}</Text>
-                  )}
-                /> */}
               </View>
 
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
-                  // Remember to replace "1" below with repository ID: {`repository-likes-${repository.id}`}
                   testID={`repository-likes-${repository.id}`}
                 >
                   {repository.likes} curtidas
@@ -88,7 +66,6 @@ export default function App() {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleLikeRepository(repository.id)}
-                // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
                 testID={`like-button-${repository.id}`}
               >
                 <Text style={styles.buttonText}>Curtir</Text>
