@@ -1,4 +1,4 @@
-# Desafio 43 - Curso GoStack Rocketseat
+# Desafio 4 - Curso GoStack Rocketseat
 
 ```Seguindo o template proposto, criar as seguintes funcionalidades no frontend:```
 - **Listar os repositórios da sua API:** Deve ser capaz de criar uma lista de todos os repositórios que estão cadastrados na sua API com os campos title, techs e número de curtidas seguindo o padrão ${repository.likes} curtidas, apenas alterando o número para ser dinâmico.
